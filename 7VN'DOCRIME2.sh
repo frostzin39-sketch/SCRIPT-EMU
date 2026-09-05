@@ -160,7 +160,7 @@ while true; do
   echo -e "${ROSA_PASTEL}   [1]${NC} ${ROSA_FOFO} Executar Otimização Extrema (Sistema + Exports) 🎀${NC}"
   echo -e "${ROSA_PASTEL}   [2]${NC} ${ROSA_FOFO} Sincronizar Memória RAM (Limpeza Completa) 🎀${NC}"
   echo -e "${ROSA_PASTEL}   [3]${NC} ${ROSA_FOFO} Diagnóstico Visual de RAM 🎀${NC}"
-  echo -e "${ROSA_PASTEL}   [4]${NC} ${ROSA_FOFO} 7VN INJETOR (Taxa de Atualização / FPS) 🎀${NC}"
+  echo -e "${ROSA_PASTEL}   [4]${NC} ${ROSA_FOFO} 7VN INJETOR (Taxa de Atualização) 🎀${NC}"
   echo -e "${ROSA_PASTEL}   [5]${NC} ${ROSA_CHOQUE} Configurar Mouse Easy 🎀${NC}"
   echo -e "${ROSA_PASTEL}   [6]${NC} ${ROSA_FOFO} Acelerador de Touch (0 Delay) 🎀${NC}"
   echo -e "${ROSA_PASTEL}   [7]${NC} ${ROSA_FOFO} Configurar Eixos X e Y (Sensibilidade) 🎀${NC}"
@@ -171,7 +171,7 @@ while true; do
   echo -e "${ROSA_PASTEL}  [12]${NC} ${ROSA_FOFO} Aumentar Prioridade do Free Fire (Processo) 🎀${NC}"
   echo -e "${ROSA_PASTEL}  [13]${NC} ${ROSA_CHOQUE} 7VN SEGREDINHO VIP 🎀${NC}"
   echo -e "${ROSA_PASTEL}  [14]${NC} ${ROSA_CHOQUE} Injetar Trick FOV de Tela (X e Y) 🎀${NC}"
-  echo -e "${ROSA_PASTEL}  [15]${NC} ${ROSA_CHOQUE} Ajusta FOV X e Y (Sensi Alta Anti-Pinar) 🎀${NC}"
+  echo -e "${ROSA_PASTEL}  [15]${NC} ${ROSA_CHOQUE} Ajusta FOV X e Y (SEGREDO MIRA EMU) 🎀${NC}"
   echo -e "${ROSA_PASTEL}  [16]${NC} ${ROSA_FOFO} Sair 🎀${NC}"
   echo ""
 
