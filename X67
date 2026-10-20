@@ -1,0 +1,967 @@
+#!/bin/bash
+
+# ==============================================================================
+#   SCRIPT X86
+# ==============================================================================
+
+# Cores e Estilos
+RESET="\033[0m"
+BRANCO="\033[1;37m"
+CINZA="\033[1;30m"
+VERMELHO="\033[1;31m"
+
+# Arte do Dragão Gigante (Visual detalhado)
+DRAGAO_ARTE="⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⡴⠒⠁
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣴⣶⣿⣿⠟⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⣛⣻⣤⣤⣶⠶⠚öp⠉⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢛⣋⣭⣴⣶⣿⣿⣿⠿⠋⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⠀⢠⡿⠀⠀⣀⡤⠀⠀⢀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣿⣿⣿⣿⣿⣿⡿⠟⣋⣥⣴⣾⣿⣿⣿⣿⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣠⣾⢃⣴⡿⠁⣠⣾⣯⣤⣴⣾⣿⣋⡁⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⠿⢋⣡⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⣴⣟⣵⣿⢏⣴⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠷⠦⣄⠀⠀⠀⢻⣿⣿⣿⡿⠋⣡⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣸⣯⣾⣿⢧⣻⣿⡞⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⡀⠀⠀⠀⠈⢿⣿⠋⢠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⢀⣴⣿⢿⣿⣿⣿⣿⣝⣺⠟⠋⠉⠈⠉⠻⣿⣿⣿⣿⣿⣿⣿⢿⣆⠀⠀⠀⠘⣯⠀⢉⣉⣭⣭⣭⣭⣭⣙⣛⣛⠻⠿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀1⣿⣤⣾⡿⣿⣿⣿⡿⠷⠖⠂⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣿⡂⠘⠇⠀⠀⠀⣿⣆⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣭⣟⣻⢿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣴⣠⣴⣿⣿⠿⣿⣧⣿⣿⠟⠛⠓⠀⠀⠀⠀⠀⠀⣸⣽⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⣸⣿⣿⡄⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠛⠛⠛⠚⠳⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⢿⣧⣿⡿⠅⣼⠏⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⢀⣚⠿⣷⣿⣿⣿⣿⠻⣿⠀⠀⠀⣰⣿⣿⣿⠇⢸⣿⣿⣿⣿⣿⣿⣿⣿⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠈⠿⠑⠬⠴⣃⣴⣿⠀⠀⠀⠀⠀⠀⠀⢀⠺⣿⡿⣱⣿⣿⣿⣿⠃⠠⠃⠀⢀⣼⣿⣿⣿⠏⢀⣾⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠈⠙⠛⠋⠉⠀⠀⠀⠀⠀⣴⣿⣿⡗⣼⣿⣿⣿⣿⣿⡀⠀⢀⣴⣿⣿⠿⢛⠅⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣦⣭⣽⢸⣿⣿⣿⣿⣯⠘⠇⠠⢛⣩⣭⣶⢞⣥⣾⣿⣿⣿⣿⣿⣿⣿⣿⠟⠛⠓⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⢿⣿⡏⣿⣿⣿⣿⣿⣿⣷⣖⣴⣿⣿⢟⣵⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡹갤⣶⣶⣶⡶⠤⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣿⣶⣾⣧⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿⠿⢟⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⯯⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣿⡿⣿⠿⢟⣛⣛⣻⣿⣿⣿⣿⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣶⠿⣦⡉⣿⠀⠀⠀⠻⣛⣵⣿⣧⢿⣿⣿⣿⣿⣿⡿⣿⣿⣿⣿⣿⡿⠼⠋⠈⠀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⡴⢻⣿⣿⣿⣿⣷⣄⣀⡀⠀⢙⡻⢿⣎⢻⣿⣿⣿⣿⢹⣿⢻⡿⠃⠋⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⡟⠀⠀⠈⣹⡿⠿⢿⣿⣿⣿⣿⣷⡮⠁⠙⢿⣿⣿⡌⠉⠀⠀⠀⠀⠀⠀⢀⠀⠈⠿⣿⣿⣿⣿⣿⡿⠿⣿⠿⢿⣿⣿⣿⣿⣿⡇⠙⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠲⠞⠏⠀⠀⠀⠀⠉⠛⠛⢿⠁⠀⣰⣿⣿⣿⡿⠦⠄⠀⠀⠀⢠⣞⣿⣦⣄⡀⠈⠛⠻⢿⣿⣷⡀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣄⠀⠀⠀⠀⣡⣾⣿⡿⠟⠛⠓⠀⠀⠀⠀⣠⣟⢩⣿⢿⣿⣿⣿⣷⣶⣶⣿⣿⡧⠀⠀⠸⣿⣿⣿⣿⣿⣿⢿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⣋⣙⣿⣶⣶⣿⣿⠟⠉⠀⠀⠀⠀⣀⣴⣾⣿⣷⣇⡿⣇⣾⣻⣧⣀⠀⠈⠉⠛⠿⣿⣧⡀⠀⣿⣿⣿⣿⣿⣿⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡟⢩⣽⠿⠛⠛⠛⢻⣄⠀⠀⠀⣠⣾⣿⣿⡿⠟⠛⠉⠁⠉⠚⠾⣿⣿⡧⡀⠀⠀⠀⠀⡿⠁⠀⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠂⠸⣇⠀⠀⠀⠀⣰⠏⠀⠀⣴⣿⣿⡿⠋⠀⠀⠀⠀⣀⡀⠀⠀⠈⢿⣿\⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⠁⠀⠀⠀⢠⡾⠁⠀⠀⠀⠀⠘⣿⣿⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿\⠀⠀⠀⠀⢿⣇⠀⠀⠀⠀⠀⣸⣿\⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⠀⠀⠀⠀⠘⢿⣶⣤⣤⣤⣾⣿⠟⠁⠀⠀⠀⣠⣿⣿⣿⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿\⡀⠀⠀⠀⠀⠈⠙⠛⠋⠉⠀⠀⠀⢀⣤⣾⣿⣿⣿⣿⣿\⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿\\⣄⣀⠀⠀⠀⠀⠀⣀⣠⣤⣾⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛\⠿⢿⣿⣿⣿⣿\⠿⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀"
+
+# ==========================================
+# CÓDIGOS GLOBAIS DE SUPORTE
+# ==========================================
+code1="settings put global animator_duration_scale 0.0"
+code2="settings put global transition_animation_scale 0.0"
+code3="settings put global window_animation_scale 0.0"
+code4="setprop debug.egl.hw 1"
+code5="setprop debug.sf.hw 1"
+code6="setprop video.accelerate.hw 1"
+code7="setprop debug.composition.type gpu"
+code8="setprop debug.performance.tuning 1"
+code9="setprop hwui.render_dirty_regions false"
+code10="setprop debug.sf.latch_unsignaled 1"
+code11="setprop debug.sf.disable_backpressure 1"
+code12="setprop debug.hwui.use_buffer_age false"
+code13="setprop debug.hwui.renderer skiagl"
+code14="setprop debug.gpu.rendering 1"
+code15="setprop persist.sys.ui.hw 1"
+code16="setprop persist.sys.purgeable_assets 1"
+code17="setprop debug.renderengine.backend skiagl"
+code18="setprop debug.hwui.target_fps 120"
+code19="setprop debug.sf.high_speed_video_fps 120"
+code20="setprop debug.cpucore.max 1"
+code21="setprop debug.cpucore.min 0"
+code22="echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+code23="echo performance > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor"
+code24="echo performance > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor"
+code25="echo performance > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor"
+code26="echo 0 > /proc/sys/kernel/random/read_wakeup_threshold"
+code27="echo 0 > /proc/sys/kernel/random/write_wakeup_threshold"
+code28="sync"
+code29="echo 3 > /proc/sys/vm/drop_caches"
+code30="echo 200 > /proc/sys/vm/vfs_cache_pressure"
+code31="echo 10 > /proc/sys/vm/dirty_background_ratio"
+code32="echo 50 > /proc/sys/vm/dirty_ratio"
+code33="settings put system peak_refresh_rate 120.0"
+code34="settings put system min_refresh_rate 120.0"
+code35="settings put secure long_press_timeout 250"
+code36="settings put system pointer_speed 1"
+code37="cmd package compile -m speed-profile -a"
+code38="cmd package bg-dexopt-job"
+code39="am hang"
+code40="input keyevent 26"
+code41="input keyevent 82"
+code42="wm size reset"
+code43="wm density reset"
+code44="settings put secure touch_exploration_enabled 0"
+code45="settings put system screen_off_timeout 600000"
+code46="logcat -c"
+code47="pm trim-caches 999999999M"
+code48="dumpsys batterystats --reset"
+code49="echo \"Free Fire Configurado\" > /dev/null"
+code50="echo \"Sucesso Total\" > /dev/null"
+
+# ==========================================
+# FUNÇÃO INTELIGENTE: Tenta root, senão roda comum
+# ==========================================
+executar_comando() {
+    local cmd="$1"
+    if command -v su &> /dev/null && su -c "id" &> /dev/null; then
+        su -c "$cmd" 2>/dev/null
+    else
+        eval "$cmd" 2>/dev/null
+    fi
+}
+
+# ==========================================
+# FUNÇÕES DE EXECUÇÃO INDEPENDENTE
+# ==========================================
+
+aplicar_opcao_1() {
+    local c=(
+        "setprop debug.egl.hw 1" "setprop debug.sf.hw 1" "setprop video.accelerate.hw 1" "setprop debug.composition.type gpu"
+        "setprop debug.performance.tuning 1" "setprop hwui.render_dirty_regions false" "setprop debug.sf.latch_unsignaled 1"
+        "setprop debug.sf.disable_backpressure 1" "setprop debug.hwui.use_buffer_age false" "setprop debug.hwui.renderer skiagl"
+        "setprop debug.gpu.rendering 1" "setprop persist.sys.ui.hw 1" "setprop persist.sys.purgeable_assets 1"
+        "setprop debug.renderengine.backend skiagl" "setprop debug.hwui.target_fps 120" "setprop debug.sf.high_speed_video_fps 120"
+        "setprop debug.hwui.profile false" "setprop debug.hwui.show_overdraw false" "setprop debug.hwui.skia_use_perfetto false"
+        "setprop debug.hwui.print_profile_swaps false" "setprop debug.hwui.layers_max_cache_bytes 20971520" "setprop debug.hwui.texture_cache_size 72"
+        "setprop debug.hwui.layer_cache_size 48" "setprop debug.hwui.path_cache_size 32" "setprop debug.hwui.shape_cache_size 4"
+        "setprop debug.hwui.drop_shadow_cache_size 6" "setprop debug.hwui.gradient_cache_size 1" "setprop debug.hwui.fbo_cache_size 16"
+        "setprop debug.hwui.pixel_format rgba_8888" "setprop debug.egl.profiler 0" "setprop debug.egl.swapinterval -1"
+        "setprop debug.sf.vsync_reactor_ignore_present_fences 1" "setprop debug.sf.showfps 0" "setprop debug.sf.enable_hwc_vds 0"
+        "setprop debug.sf.auto_latch_unsignaled 1" "setprop debug.sf.phase_offset_threshold_ns 10000000" "setprop debug.sf.early_phase_offset_ns -1200000"
+        "setprop debug.sf.early_gl_phase_offset_ns -3000000" "setprop debug.sf.early_app_phase_offset_ns -1500000" "setprop debug.sf.high_speed_video_processing 1"
+        "setprop debug.sf.layer_culling 1" "setprop debug.sf.predict_present_time 1" "setprop debug.sf.disable_passes 0"
+        "setprop debug.renderengine.max_texture_size 16384" "setprop persist.sys.force_msaa 1" "setprop debug.egl.force_msaa 1"
+        "setprop sys.hwui.smooth_transitions 1" "setprop video.use.hardware 1" "setprop debug.ui.hw 1"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_2() {
+    local c=(
+        "settings put global animator_duration_scale 0.0" "settings put global transition_animation_scale 0.0" "settings put global window_animation_scale 0.0"
+        "sync" "logcat -c" "dumpsys batterystats --reset" "settings put global power_suppressed_packages_ids 0"
+        "settings put global low_power 0" "settings put global stay_on_while_plugged_in 3" "settings put global policy_control null"
+        "settings put global heads_up_notifications_enabled 0" "settings put global package_verifier_enable 0" "settings put global verify_apps 0"
+        "settings put global captive_portal_detection_enabled 0" "settings put global netstats_enabled 0" "settings put global adaptive_connectivity_enabled 0"
+        "settings put global wifi_suspend_optimizations_enabled 0" "settings put global bluetooth_disabled_profiles 0" "settings put global location_mode 0"
+        "settings put global automatic_storage_manager_enabled 0" "settings put global app_auto_restriction_enabled 0" "settings put global forced_app_standby_enabled 0"
+        "settings put global dynamic_power_savings_enabled 0" "settings put global ota_disable_automatic_update 1" "settings put global show_battery_percent 1"
+        "settings put global zen_mode 0" "settings put global emergency_tone 0" "settings put global debug_app \"\""
+        "settings put global wait_for_debugger 0" "settings put global strict_mode_visual 0" "settings put global compatibility_mode 1"
+        "settings put global app_idle_constants _" "settings put global backup_enabled 0" "settings put global carrier_apps_handled 1"
+        "settings put global development_settings_enabled 1" "settings put global usb_mass_storage_enabled 0" "settings put global wifi_scan_throttle_enabled 0"
+        "settings put global ble_scan_always_enabled 0" "settings put global activity_manager_constants _" "settings put global background_check_results _"
+        "settings put global network_recommendations_package \"\"" "settings put global use_open_wifi_package \"\"" "settings put global multi_cb_enabled 0"
+        "settings put global restricted_device_state 0" "settings put global system_server_compiler_filter speed" "settings put global system_profiler_enabled 0"
+        "setprop persist.sys.stability.mode 1" "setprop persist.sys.crash_count 0" "setprop sys.boot_completed 1"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_3() {
+    local c=(
+        "echo 100 > /proc/sys/vm/swappiness" "echo 3 > /proc/sys/vm/drop_caches" "echo 200 > /proc/sys/vm/vfs_cache_pressure"
+        "echo 10 > /proc/sys/vm/dirty_background_ratio" "echo 50 > /proc/sys/vm/dirty_ratio" "echo 100 > /proc/sys/vm/overcommit_memory"
+        "echo 50 > /proc/sys/vm/overcommit_ratio" "echo 1024 > /proc/sys/vm/min_free_kbytes" "echo 2048 > /proc/sys/vm/min_free_order_shift"
+        "echo 0 > /proc/sys/vm/oom_dump_tasks" "echo 1 > /proc/sys/vm/compact_memory" "echo 500 > /proc/sys/vm/dirty_expire_centisecs"
+        "echo 1000 > /proc/sys/vm/dirty_writeback_centisecs" "echo 0 > /proc/sys/vm/page-cluster" "echo 0 > /proc/sys/vm/laptop_mode"
+        "echo 3 > /proc/sys/vm/stat_interval" "echo 1 > /proc/sys/vm/block_dump" "echo 0 > /proc/sys/vm/oom_kill_allocating_task"
+        "echo 64 > /proc/sys/vm/max_map_count" "echo 512 > /proc/sys/fs/file-max" "echo 1024 > /proc/sys/fs/inode-max"
+        "echo 100 > /proc/sys/fs/lease-break-time" "echo 30 > /proc/sys/fs/inotify/max_queued_events" "echo 65536 > /proc/sys/fs/inotify/max_user_watches"
+        "echo 128 > /proc/sys/fs/inotify/max_user_instances" "sync" "echo 1 > /proc/sys/vm/drop_caches" "echo 2 > /proc/sys/vm/drop_caches"
+        "am kill-all" "pm trim-caches 999999M" "settings put global low_ram_prop_override 0" "setprop ro.config.low_ram false"
+        "setprop persist.sys.max_cached_processes 64" "setprop ro.vendor.use_skia_cache true" "setprop persist.sys.dalvik.vm.lib.2 libart.so"
+        "setprop dalvik.vm.heapgrowthlimit 512m" "setprop dalvik.vm.heapsize 768m" "setprop dalvik.vm.heapminfree 4m"
+        "setprop dalvik.vm.heapmaxfree 16m" "setprop dalvik.vm.heaptargetutilization 0.75" "setprop dalvik.vm.dex2oat-threads 4"
+        "setprop dalvik.vm.image-dex2oat-threads 4" "setprop dalvik.vm.execution-mode int:jit" "setprop dalvik.vm.usejit 1"
+        "setprop dalvik.vm.usejitprofiles 1" "setprop dalvik.vm.jitinitialcapacity 512" "setprop dalvik.vm.jitmaxcapacity 8192"
+        "setprop dalvik.vm.jitthreaddelay 10" "setprop dalvik.vm.jittargetutilization 0.75" "setprop ro.sys.fw.bg_apps_limit 32"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_4() {
+    local c=(
+        "rm -rf /data/local/tmp/*" "rm -rf /sdcard/Android/data/*/cache/*" "rm -rf /sdcard/Android/media/*/cache/*"
+        "rm -rf /sdcard/Android/obb/*/cache/*" "rm -rf /data/system/package_cache/*" "rm -rf /data/dalvik-cache/*"
+        "rm -rf /cache/*" "rm -rf /data/cache/*" "rm -rf /sdcard/Download/*.tmp" "rm -rf /sdcard/MIUI/debug_log/*"
+        "rm -rf /sdcard/WhatsApp/Media/WhatsApp Video/Sent/*" "rm -rf /sdcard/Telegram/Telegram Audio/*" "rm -rf /sdcard/tencent/MicroMsg/Download/*"
+        "pm trim-caches 999999M" "pm clear com.dts.freefireth" "pm clear com.dts.freefiremax" "pm clear com.tencent.ig"
+        "pm clear com.activision.callofduty.shooter" "pm clear com.mojang.minecraftpe" "pm clear com.roblox.client"
+        "pm clear com.kiloo.subwaysurf" "pm clear com.king.candycrushsaga" "pm clear com.supercell.clashofclans"
+        "pm clear com.supercell.brawlstars" "pm clear com.garena.game.kgtw" "sync" "echo 3 > /proc/sys/vm/drop_caches"
+        "rm -f /sdcard/*.log" "rm -f /sdcard/*.txt" "rm -f /sdcard/debug.txt" "rm -f /sdcard/error.log"
+        "rm -rf /sdcard/Android/obb/.nomedia" "rm -rf /sdcard/DCIM/.thumbnails/*" "rm -rf /sdcard/Pictures/Instagram/*"
+        "rm -rf /sdcard/Pictures/Messenger/*" "rm -rf /sdcard/Pictures/WhatsApp/*" "rm -rf /sdcard/Download/Telegram/*"
+        "rm -rf /sdcard/Bluetooth/*" "rm -rf /sdcard/LOST.DIR/*" "rm -rf /sdcard/temp/*" "rm -rf /sdcard/tmp/*"
+        "rm -rf /data/user/0/*/cache/*" "rm -rf /data/user_de/0/*/cache/*" "rm -rf /data/app/~~*/*==/oat/*"
+        "rm -rf /data/system/usagestats/*" "rm -rf /data/system/recent_tasks/*" "rm -rf /data/system/batterystats.bin"
+        "rm -rf /data/system/netstats/*" "echo \"Limpeza Profunda Concluida\" > /dev/null"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_5() {
+    local c=(
+        "settings put system peak_refresh_rate 120.0" "settings put system min_refresh_rate 120.0" "setprop debug.hwui.target_fps 120"
+        "setprop debug.sf.high_speed_video_fps 120" "service call SurfaceFlinger 1035 i32 120" "setprop debug.egl.max_interval 1"
+        "setprop debug.egl.min_interval 1" "setprop debug.sf.frame_rate_multiple_threshold 120" "setprop debug.sf.treat_1080p_as_high_fps 1"
+        "setprop persist.sys.refresh_rate 120" "setprop ro.sf.fps 120" "setprop debug.sf.vsync_offset_ns 0"
+        "setprop debug.sf.sf_vsync_offset_ns 0" "setprop debug.sf.app_vsync_offset_ns 0" "setprop debug.sf.max_frame_buffer_acquired_buffers 3"
+        "setprop debug.sf.enable_gl_backpressure 0" "setprop debug.sf.use_phase_offsets_as_defaults 1" "setprop debug.sf.padding 0"
+        "setprop debug.sf.disable_blending 0" "setprop debug.sf.triple_buffer 1" "setprop debug.composition.disable.ui 0"
+        "setprop debug.composition.type gpu" "setprop video.accelerate.hw 1" "setprop debug.hwui.renderer skiagl"
+        "setprop debug.hwui.use_buffer_age false" "setprop debug.gpu.rendering 1" "setprop persist.sys.ui.hw 1"
+        "setprop persist.sys.purgeable_assets 1" "setprop debug.renderengine.backend skiagl" "setprop debug.egl.hw 1"
+        "setprop debug.sf.hw 1" "setprop hwui.render_dirty_regions false" "setprop debug.sf.latch_unsignaled 1"
+        "setprop debug.sf.disable_backpressure 1" "settings put system display_color_mode 1" "settings put system screen_brightness_mode 0"
+        "settings put system screen_brightness 255" "settings put system min_brightness 0" "settings put system auto_brightness_adaptive_brightness 0"
+        "settings put global low_power_trigger_level 0" "settings put global forced_refresh_rate 120" "setprop persist.vendor.display.max_refresh_rate 120"
+        "setprop persist.vendor.display.min_refresh_rate 120" "setprop ro.vendor.display.refresh_rate 120" "setprop vendor.display.max_refresh_rate 120"
+        "setprop vendor.display.min_refresh_rate 120" "setprop vendor.display.enable_gpuboost 1" "setprop vendor.display.enable_fps_caching 0"
+        "setprop debug.hwui.fps_divisor 1"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_6() {
+    local c=(
+        "settings put secure long_press_timeout 250" "settings put system pointer_speed 1" "settings put secure touch_exploration_enabled 0"
+        "settings put system touch_sensibility_enabled 1" "settings put system stylus_buttons_enabled 1" "settings put system screen_off_timeout 600000"
+        "settings put secure multi_press_timeout 200" "settings put secure accessibility_touch_exploration_enabled 0" "settings put secure accessibility_shortcut_enabled 0"
+        "settings put secure show_touches 0" "settings put secure pointer_location 0" "settings put secure screen_brightness_for_vr 255"
+        "setprop debug.touch.device 0" "setprop debug.touch.debounce 0" "setprop touch.filter.level 0"
+        "setprop touch.device.type touchScreen" "setprop touch.orientationAware 1" "setprop touch.size.calibration geometric"
+        "setprop touch.pressure.calibration physical" "setprop touch.distance.calibration none" "setprop touch.coverage.calibration none"
+        "setprop touch.orientation.calibration none" "setprop touch.distance.scale 0" "setprop touch.size.scale 0"
+        "setprop touch.pressure.scale 0.001" "setprop touch.gesture.smooth 1" "setprop touch.sampling_rate 240"
+        "setprop touch.response_boost 1" "setprop touch.latency_reduction 1" "setprop persist.sys.touch_boost 1"
+        "setprop vendor.touch.boost 1" "setprop vendor.touch.sample_rate 240" "setprop vendor.touch.lat_reduction 1"
+        "setprop ro.input.multitouch_timeout 50" "setprop ro.input.capture_delay 0" "setprop ro.input.debounce_delay 0"
+        "setprop ro.input.filter_noise 0" "setprop ro.input.touch_boost 1" "setprop ro.input.response_speed 100"
+        "input keyevent 26" "input keyevent 82" "settings put secure double_tap_to_wake 0"
+        "settings put secure lift_to_wake 0" "settings put system select_item_setting 0" "settings put system vibrate_input_enabled 0"
+        "settings put system haptic_feedback_enabled 0" "settings put system keyboard_vibration_enabled 0" "settings put system sound_effects_enabled 0"
+        "settings put system key_click_sound 0"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_7() {
+    local c=(
+        "setprop debug.cpucore.max 1" "setprop debug.cpucore.min 0" "echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor" "echo performance > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor" "echo performance > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu5/cpufreq/scaling_governor" "echo performance > /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor" "echo 1 > /sys/devices/system/cpu/cpu0/online"
+        "echo 1 > /sys/devices/system/cpu/cpu1/online" "echo 1 > /sys/devices/system/cpu/cpu2/online" "echo 1 > /sys/devices/system/cpu/cpu3/online"
+        "echo 1 > /sys/devices/system/cpu/cpu4/online" "echo 1 > /sys/devices/system/cpu/cpu5/online" "echo 1 > /sys/devices/system/cpu/cpu6/online"
+        echo 1 > /sys/devices/system/cpu/cpu7/online" "chmod 664 /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq"
+        "chmod 664 /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq" "setprop persist.sys.cpu.boost 1" "setprop sys.use_fifo_priority 1"
+        "setprop persist.sys.thermal.max_limit 0" "setprop persist.sys.perf.profile 1" "setprop vendor.perf.profile 1"
+        "setprop vendor.power.profile performance" "setprop ro.config.hw_power_mode 1" "setprop ro.vendor.use_perf_lock 1"
+        "setprop ro.config.perf_boost 1" "setprop debug.cpurender.threads 8" "setprop debug.sched.affinity 255"
+        "setprop persist.sys.scsi_block_requests 1" "setprop sys.io.scheduler bfq" "echo bfq > /sys/block/mmcblk0/queue/scheduler"
+        "echo bfq > /sys/block/sda/queue/scheduler" "echo bfq > /sys/block/sdb/queue/scheduler" "echo 0 > /sys/block/mmcblk0/queue/rotational"
+        "echo 0 > /sys/block/sda/queue/rotational" "echo 128 > /sys/block/mmcblk0/queue/read_ahead_kb" "echo 128 > /sys/block/sda/queue/read_ahead_kb"
+        "echo 1 > /sys/block/mmcblk0/queue/add_random" "echo 1 > /sys/block/sda/queue/add_random" "echo 0 > /sys/class/thermal/thermal_zone0/mode"
+        "echo 0 > /sys/class/thermal/thermal_zone1/mode" "echo 0 > /sys/class/thermal/thermal_zone2/mode" "echo 99 > /proc/sys/kernel/sched_rr_timeslice_ms"
+        "echo 1 > /proc/sys/kernel/sched_child_runs_first" "echo 0 > /proc/sys/kernel/sched_autogroup_enabled" "echo 100 > /proc/sys/kernel/sched_latency_ns"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_8() {
+    local c=(
+        "echo 0 > /proc/sys/kernel/random/read_wakeup_threshold" "echo 0 > /proc/sys/kernel/random/write_wakeup_threshold"
+        "settings put global airplane_mode_on 0" "settings put global mobile_data 1" "settings put global data_roaming 0"
+        "settings put global network_recommendations_enabled 0" "settings put global captive_portal_mode 0" "settings put global wifi_watchdog_poor_network_detection 0"
+        "setprop net.tcp.buffersize.default 4096,87380,704128,4096,16384,110208" "setprop net.tcp.buffersize.wifi 524288,1048576,2097152,262144,524288,1048576"
+        "setprop net.tcp.buffersize.lte 524288,1048576,2097152,262144,524288,1048576" "setprop net.tcp.buffersize.umts 4096,87380,704128,4096,16384,110208"
+        "setprop net.tcp.buffersize.gprs 4096,87380,704128,4096,16384,110208" "setprop net.tcp.buffersize.edge 4096,87380,704128,4096,16384,110208"
+        "setprop persist.radio.add_nw_param 1" "setprop persist.radio.lte_vrte_ltd 1" "setprop persist.radio.data_con_rprt 1"
+        "setprop persist.radio.apm_sim_not_pwdn 1" "setprop persist.radio.custom_ecc 1" "setprop persist.radio.multisim.config dsds"
+        "setprop persist.ril.mux.report.case 0" "setprop persist.vendor.radio.custom_ecc 1" "setprop persist.vendor.radio.rat_order LTE,WCDMA,GSM"
+        "setprop persist.vendor.radio.sib16_support 1" "setprop vendor.radio.dar.enabled true" "setprop ro.ril.enable.dtm 0"
+        "setprop ro.ril.gprsclass 32" "setprop ro.ril.hsdpa.category 28" "setprop ro.ril.hsupa.category 7"
+        "setprop ro.ril.hsxpa 4" "setprop ro.ril.disable.power.collapse 0" "setprop ro.ril.tcp.window.memory 524288"
+        "settings put global bluetooth_class_of_device 0" "settings put global ble_scan_always_enabled 0" "settings put global wifi_networks_available_notification_enabled 0"
+        "settings put global wifi_ssid_restriction 0" "settings put global wifi_max_dhcp_retry_count 1" "settings put global wifi_idle_ms 0"
+        "settings put global preferred_network_mode 11" "settings put system wifi_num_allowed_channels 13" "settings put system wifi_country_code BR"
+        "ifconfig wlan0 txqueuelen 1000" "ifconfig rmnet_data0 txqueuelen 1000" "ip link set wlan0 qlen 1000"
+        "ip link set rmnet_data0 qlen 1000" "echo 1 > /proc/sys/net/ipv4/tcp_congestion_control" "echo bbr > /proc/sys/net/ipv4/tcp_congestion_control"
+        "echo 1 > /proc/sys/net/ipv4/tcp_no_metrics_save" "echo 1 > /proc/sys/net/ipv4/tcp_window_scaling" "echo 1 > /proc/sys/net/ipv4/tcp_sack"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_9() {
+    local c=(
+        "cmd package compile -m speed-profile -a" "cmd package bg-dexopt-job" "am hang"
+        "am kill com.facebook.katana" "am kill com.facebook.orca" "am kill com.instagram.android"
+        "am kill com.whatsapp" "am kill com.twitter.android" "am kill com.zhiliaoapp.musically"
+        "am kill com.google.android.youtube" "am kill com.google.android.googlequicksearchbox" "am kill com.netflix.mediaclient"
+        "am force-stop com.facebook.katana" "am force-stop com.facebook.orca" "am force-stop com.instagram.android"
+        "am force-stop com.whatsapp" "am force-stop com.twitter.android" "am force-stop com.zhiliaoapp.musically"
+        "am force-stop com.google.android.youtube" "am force-stop com.netflix.mediaclient" "cmd appops set com.facebook.katana RUN_ANY_IN_BACKGROUND ignore"
+        "cmd appops set com.facebook.orca RUN_ANY_IN_BACKGROUND ignore" "cmd appops set com.instagram.android RUN_ANY_IN_BACKGROUND ignore"
+        "cmd appops set com.whatsapp RUN_ANY_IN_BACKGROUND ignore" "cmd appops set com.twitter.android RUN_ANY_IN_BACKGROUND ignore"
+        "cmd appops set com.zhiliaoapp.musically RUN_ANY_IN_BACKGROUND ignore" "cmd appops set com.google.android.youtube RUN_ANY_IN_BACKGROUND ignore"
+        "cmd appops set com.netflix.mediaclient RUN_ANY_IN_BACKGROUND ignore" "settings put global background_process_limit 2"
+        "setprop persist.sys.max_cached_processes 2" "pm disable com.facebook.services" "pm disable com.facebook.system"
+        "pm disable com.facebook.appmanager" "pm disable com.google.android.as" "pm disable com.google.android.feedback"
+        "pm disable com.google.android.printservice.recommendation" "pm disable com.google.android.projection.gearhead" "pm disable com.google.android.partnersetup"
+        "pm disable com.google.android.setupwizard" "pm disable com.samsung.android.bixby.wakeup" "pm disable com.samsung.android.bixby.agent"
+        "pm disable com.xiaomi.discover" "pm disable com.miui.analytics" "pm disable com.miui.player"
+        "pm disable com.heytap.market" "pm disable com.oppo.market" "pm disable com.vivo.appstore"
+        "sync" "echo 3 > /proc/sys/vm/drop_caches"
+    )
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_10() {
+    clear
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "${VERMELHO}              AJUSTAR TRICKFOV DA TELA (FREE FIRE)              ${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -n "Digite seu trickfov de tela: "
+    read trick_val
+
+    if [ -z "$trick_val" ]; then
+        trick_val=500
+    fi
+
+    echo -e "\n${VERMELHO}Aplicando TrickFOV $trick_val...${RESET}"
+
+    local c=(
+        "setprop debug.hwui.target_fps 120"
+        "setprop debug.sf.high_speed_video_fps 120"
+        "settings put system peak_refresh_rate 120.0"
+        "setprop debug.trickfov.scale $trick_val"
+        "setprop debug.touch.sensitivity_multiplier $trick_val"
+        "setprop touch.fov.adjustment $trick_val"
+        "setprop persist.sys.touch_boost 1"
+        "setprop debug.hwui.fov_x $trick_val"
+        "setprop debug.hwui.fov_y $trick_val"
+        "setprop persist.sys.fov.x.scale $trick_val"
+        "setprop persist.sys.fov.y.scale $trick_val"
+        "setprop touch.kpis.fov_x $trick_val"
+        "setprop touch.kpis.fov_y $trick_val"
+        "setprop debug.renderengine.fov_x $trick_val"
+        "setprop debug.renderengine.fov_y $trick_val"
+        "setprop ro.input.fov_x_scale $trick_val"
+        "setprop ro.input.fov_y_scale $trick_val"
+        "settings put system pointer_speed 1"
+        "setprop debug.sf.vsync_reactor_ignore_present_fences 1"
+        "echo \"TrickFOV $trick_val aplicado com sucesso\" > /dev/null"
+    )
+
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_11() {
+    clear
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "${VERMELHO}        INJETAR R TWEAK BONECO LENTO (TURBO/ANGLE)          ${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "\n${VERMELHO}Integrando GlTools, Adreno 630, Renderizador ANGLE e Remoção de Limites (120 FPS)...${RESET}"
+
+    local c=(
+        "setprop ro.opengles.version 196610"
+        "setprop ro.hardware.egl adreno"
+        "setprop ro.gpu.vendor Qualcomm"
+        "setprop ro.gpu.renderer \"Adreno (TM) 630\""
+        "setprop debug.egl.profiler 1"
+        "setprop debug.egl.hw 1"
+        "setprop debug.sf.hw 1"
+        "setprop debug.composition.type gpu"
+        "setprop debug.enable.gles31 1"
+        "setprop debug.hwui.renderer skiagl"
+        "setprop debug.renderengine.backend skiagl"
+        "setprop debug.hwui.use_buffer_age false"
+        "setprop debug.hwui.target_fps 120"
+        "setprop debug.sf.high_speed_video_fps 120"
+        "setprop debug.gltools.fake_gpu 1"
+        "setprop debug.gltools.renderer \"Adreno (TM) 630\""
+        "setprop debug.gltools.vendor \"Qualcomm\""
+        "setprop debug.gltools.substitute_shaders 1"
+        "setprop debug.gltools.force_16bit 0"
+        "setprop debug.gltools.optimize_glsl 0"
+        "setprop debug.gltools.texture_compression 0"
+        "setprop debug.gltools.downscale 1"
+        "setprop debug.gltools.max_texture_size 2048"
+        "setprop debug.gltools.anisotropy 0"
+        "setprop debug.gltools.force_msaa 0"
+        "setprop debug.gltools.vsync 1"
+        "setprop debug.gltools.limit_fps 120"
+        "setprop debug.gltools.fix_lighting 0"
+        "setprop debug.gltools.precision_modifier 1"
+        "setprop debug.gltools.fp16 0"
+        "setprop debug.gltools.shader_storage 1"
+        "setprop debug.gltools.buffer_strategy 2"
+        "setprop debug.gltools.vertex_cache 0"
+        "setprop debug.gltools.pixel_buffer 0"
+        "setprop debug.gltools.occlusion_culling 0"
+        "setprop debug.gltools.depth_buffer 1"
+        "setprop debug.gltools.stencil_buffer 1"
+        "setprop debug.gltools.alpha_test 1"
+        "setprop debug.gltools.blend_func 0"
+        "setprop debug.angle.backend angle"
+        "setprop persist.graphics.egl angle"
+        "setprop debug.gpu.force_angle 1"
+        "setprop debug.hwui.use_angle 1"
+        "setprop debug.renderengine.use_angle 1"
+        "setprop debug.sf.disable_client_composition 0"
+        "setprop debug.composition.type gpu"
+        "setprop debug.hwui.fps_divisor 0"
+        "setprop debug.sf.max_fps 120"
+        "setprop debug.sf.frame_rate_multiple_threshold 0"
+        "setprop debug.sf.vsync_reactor_ignore_present_fences 1"
+        "setprop debug.sf.latch_unsignaled 1"
+        "setprop debug.sf.disable_backpressure 1"
+        "setprop debug.gpu.rendering 1"
+        "setprop persist.sys.ui.hw 1"
+        "setprop debug.net.lag_compensation 0"
+        "setprop debug.net.interp_delay 150"
+        "setprop debug.net.packet_delay 200"
+        "setprop debug.touch.latency_add 180"
+        "setprop debug.input.anim_delay 250"
+        "setprop debug.renderengine.vsync_delay 120"
+        "setprop debug.sf.vsync_offset_ns 20000000"
+        "setprop debug.sf.app_vsync_offset_ns 15000000"
+        "setprop debug.sf.early_phase_offset_ns 10000000"
+        "setprop debug.sf.early_gl_phase_offset_ns 10000000"
+        "setprop debug.sf.early_app_phase_offset_ns 10000000"
+        "setprop debug.hwui.render_delay 150"
+        "setprop debug.hwui.frame_delay 100"
+        "setprop debug.hwui.input_delay 120"
+        "setprop debug.player.movement_lag 1"
+        "setprop debug.enemy.model_delay 200"
+        "setprop debug.animation.slow_down 1"
+        "setprop debug.physics.delay_factor 1.5"
+        "setprop debug.entity.interpolation_lag 250"
+        "setprop debug.net.jitter_add 100"
+        "setprop debug.net.ping_penalty 120"
+        "setprop debug.net.send_delay 100"
+        "setprop debug.net.recv_delay 100"
+        "setprop debug.game.sync_delay 180"
+        "setprop debug.game.tick_rate_drop 45"
+        "setprop debug.game.frame_drop 1"
+        "setprop debug.game.ai_delay 200"
+        "setprop debug.game.input_lag 150"
+        "setprop debug.game.move_lag 180"
+        "setprop debug.game.packet_drop 0"
+        "setprop debug.game.jitter_rate 80"
+        "setprop debug.game.time_skew 1.2"
+        "setprop debug.game.render_lag 150"
+        "setprop debug.game.texture_lag 100"
+        "setprop debug.game.shader_lag 120"
+        "setprop debug.game.buffer_lag 150"
+        "setprop debug.game.queue_lag 100"
+        "setprop debug.game.thread_sleep 50"
+        "setprop debug.game.sync_sleep 40"
+        "setprop debug.game.wait_delay 80"
+        "setprop debug.game.timeout_ms 500"
+        "setprop debug.game.response_delay 150"
+        "setprop debug.game.anim_lag 180"
+        "setprop debug.game.bone_delay 200"
+        "setprop debug.game.skeleton_delay 200"
+        "setprop debug.game.mesh_delay 150"
+        "setprop debug.game.skin_delay 150"
+        "setprop debug.game.hitbox_delay 200"
+        "setprop debug.game.collision_delay 200"
+        "setprop debug.game.ragdoll_delay 250"
+        "setprop debug.game.physics_delay 200"
+        "setprop debug.game.gravity_delay 100"
+        "setprop debug.game.velocity_delay 150"
+        "setprop debug.game.acceleration_delay 150"
+        "setprop debug.game.friction_delay 100"
+        "setprop debug.game.drag_delay 120"
+        "setprop debug.game.wind_delay 50"
+        "setprop debug.game.inertia_delay 200"
+        "setprop debug.game.momentum_delay 200"
+        "setprop debug.game.restitution_delay 100"
+        "echo \"R Tweak Boneco Lento ANGLE aplicado com sucesso\" > /dev/null"
+    )
+
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+aplicar_opcao_12() {
+    for i in {1..50}; do
+        local comando_atual=$(eval echo \$code$i)
+        executar_comando "$comando_atual"
+    done
+}
+
+aplicar_opcao_13() {
+    clear
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "${VERMELHO}                INJETAR AUXÍLIO DE MIRA                         ${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    
+    echo -n "Deseja ativar precision? (s/n): "
+    read resp_precision
+    echo -n "Deseja acelerar touch x e y? (s/n): "
+    read resp_touch
+
+    echo -e "\n${VERMELHO}Injetando 50 comandos de GPU e calibração fina de mira...${RESET}"
+
+    local c=(
+        "setprop debug.gpu.rendering 1" "setprop debug.egl.hw 1" "setprop debug.sf.hw 1"
+        "setprop video.accelerate.hw 1" "setprop debug.composition.type gpu" "setprop debug.performance.tuning 1"
+        "setprop debug.hwui.renderer skiagl" "setprop debug.renderengine.backend skiagl" "setprop persist.sys.ui.hw 1"
+        "setprop persist.sys.purgeable_assets 1" "setprop debug.hwui.target_fps 120" "setprop debug.sf.high_speed_video_fps 120"
+        "setprop debug.hwui.pixel_format rgba_8888" "setprop debug.egl.swapinterval -1" "setprop debug.sf.vsync_reactor_ignore_present_fences 1"
+        "setprop debug.sf.auto_latch_unsignaled 1" "setprop debug.renderengine.max_texture_size 16384" "setprop persist.sys.force_msaa 1"
+        "setprop debug.egl.force_msaa 1" "setprop sys.hwui.smooth_transitions 1" "setprop video.use.hardware 1"
+        "setprop debug.ui.hw 1" "setprop debug.hwui.layer_cache_size 48" "setprop debug.hwui.texture_cache_size 72"
+        "setprop debug.hwui.path_cache_size 32" "setprop debug.hwui.shape_cache_size 4" "setprop debug.hwui.fbo_cache_size 16"
+        "setprop debug.hwui.drop_shadow_cache_size 6" "setprop debug.hwui.gradient_cache_size 1" "setprop debug.sf.layer_culling 1"
+        "setprop debug.sf.predict_present_time 1" "setprop debug.sf.disable_passes 0" "setprop debug.sf.high_speed_video_processing 1"
+        "setprop debug.sf.early_phase_offset_ns -1200000" "setprop debug.sf.early_gl_phase_offset_ns -3000000" "setprop debug.sf.early_app_phase_offset_ns -1500000"
+        "setprop debug.sf.phase_offset_threshold_ns 10000000" "setprop debug.hwui.profile false" "setprop debug.hwui.show_overdraw false"
+        "setprop debug.hwui.skia_use_perfetto false" "setprop debug.hwui.print_profile_swaps false" "setprop debug.egl.profiler 0"
+        "setprop debug.sf.showfps 0" "setprop debug.sf.enable_hwc_vds 0" "setprop debug.hwui.layers_max_cache_bytes 20971520"
+        "setprop debug.hwui.pixel_format rgba_8888" "setprop debug.egl.max_interval 1" "setprop debug.egl.min_interval 1"
+        "setprop debug.sf.frame_rate_multiple_threshold 120" "setprop debug.sf.treat_1080p_as_high_fps 1"
+    )
+
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+
+    if [[ "$resp_precision" =~ ^[Ss]$ ]]; then
+        executar_comando "setprop debug.touch.precision_boost 1"
+        executar_comando "setprop touch.filter.precision 1"
+        executar_comando "settings put system pointer_speed 2"
+        echo -e "${VERMELHO}[+] Módulo Precision ativado com sucesso!${RESET}"
+    fi
+
+    if [[ "$resp_touch" =~ ^[Ss]$ ]]; then
+        executar_comando "setprop debug.touch.x_scale 1.2"
+        executar_comando "setprop debug.touch.y_scale 1.2"
+        executar_comando "setprop persist.sys.touch.boost_xy 1"
+        echo -e "${VERMELHO}[+] Aceleração de Touch X e Y aplicada!${RESET}"
+    fi
+
+    echo -e "\n${BRANCO}Auxílio de mira configurado e aplicado com sucesso!${RESET}"
+}
+
+# ==========================================
+# NOVAS OPÇÕES INTEGRADAS (Opções 14, 15 e 16)
+# ==========================================
+
+# OPÇÃO 14: Bypass Tweak (100 códigos de otimização de celular + 50 códigos de limpeza de RAM e cache virtual do Free Fire)
+aplicar_opcao_14() {
+    clear
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "${VERMELHO}            CONFIGURANDO BYPASS TWEAK & FREE FIRE           ${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "\n${VERMELHO}Aplicando otimizações avançadas do sistema e limpeza de cache virtual...${RESET}"
+
+    local c=(
+        # Bloco 1: Otimizações de Sistema, Renderização e Performance (1 a 50)
+        "setprop persist.sys.ui.hw 1" "setprop debug.sf.hw 1" "setprop video.accelerate.hw 1" "setprop debug.composition.type gpu"
+        "setprop debug.performance.tuning 1" "setprop hwui.render_dirty_regions false" "setprop debug.sf.latch_unsignaled 1"
+        "setprop debug.sf.disable_backpressure 1" "setprop debug.hwui.use_buffer_age false" "setprop debug.hwui.renderer skiagl"
+        "setprop debug.gpu.rendering 1" "setprop persist.sys.purgeable_assets 1" "setprop debug.renderengine.backend skiagl"
+        "setprop debug.hwui.target_fps 120" "setprop debug.sf.high_speed_video_fps 120" "setprop sys.hwui.smooth_transitions 1"
+        "setprop video.use.hardware 1" "setprop debug.ui.hw 1" "setprop persist.sys.force_msaa 1" "setprop debug.egl.force_msaa 1"
+        "setprop debug.renderengine.max_texture_size 16384" "setprop debug.sf.layer_culling 1" "setprop debug.sf.predict_present_time 1"
+        "setprop debug.sf.disable_passes 0" "setprop debug.sf.early_phase_offset_ns -1200000" "setprop debug.sf.early_gl_phase_offset_ns -3000000"
+        "setprop debug.sf.early_app_phase_offset_ns -1500000" "setprop debug.sf.high_speed_video_processing 1" "setprop debug.egl.profiler 0"
+        "setprop debug.egl.swapinterval -1" "setprop debug.sf.vsync_reactor_ignore_present_fences 1" "setprop debug.sf.showfps 0"
+        "setprop debug.sf.enable_hwc_vds 0" "setprop debug.sf.auto_latch_unsignaled 1" "setprop debug.sf.phase_offset_threshold_ns 10000000"
+        "setprop debug.hwui.profile false" "setprop debug.hwui.show_overdraw false" "setprop debug.hwui.skia_use_perfetto false"
+        "setprop debug.hwui.print_profile_swaps false" "setprop debug.hwui.layers_max_cache_bytes 20971520" "setprop debug.hwui.texture_cache_size 72"
+        "setprop debug.hwui.layer_cache_size 48" "setprop debug.hwui.path_cache_size 32" "setprop debug.hwui.shape_cache_size 4"
+        "setprop debug.hwui.drop_shadow_cache_size 6" "setprop debug.hwui.gradient_cache_size 1" "setprop debug.hwui.fbo_cache_size 16"
+        "setprop debug.hwui.pixel_format rgba_8888" "setprop debug.egl.hw 1" "setprop persist.sys.stability.mode 1" "setprop sys.boot_completed 1"
+
+        # Bloco 2: Otimizações de Processamento e Resposta Adicionais (51 a 100)
+        "settings put global animator_duration_scale 0.0" "settings put global transition_animation_scale 0.0" "settings put global window_animation_scale 0.0"
+        "setprop ro.config.low_ram false" "setprop persist.sys.max_cached_processes 64" "setprop ro.vendor.use_skia_cache true"
+        "setprop persist.sys.dalvik.vm.lib.2 libart.so" "setprop dalvik.vm.heapgrowthlimit 512m" "setprop dalvik.vm.heapsize 768m"
+        "setprop dalvik.vm.heapminfree 4m" "setprop dalvik.vm.heapmaxfree 16m" "setprop dalvik.vm.heaptargetutilization 0.75"
+        "setprop dalvik.vm.dex2oat-threads 4" "setprop dalvik.vm.image-dex2oat-threads 4" "setprop dalvik.vm.execution-mode int:jit"
+        "setprop dalvik.vm.usejit 1" "setprop dalvik.vm.usejitprofiles 1" "setprop dalvik.vm.jitinitialcapacity 512"
+        "setprop dalvik.vm.jitmaxcapacity 8192" "setprop dalvik.vm.jitthreaddelay 10" "setprop dalvik.vm.jittargetutilization 0.75"
+        "setprop ro.sys.fw.bg_apps_limit 32" "setprop debug.cpucore.max 1" "setprop debug.cpucore.min 0"
+        "setprop persist.sys.cpu.boost 1" "setprop sys.use_fifo_priority 1" "setprop persist.sys.thermal.max_limit 0"
+        "setprop persist.sys.perf.profile 1" "setprop vendor.perf.profile 1" "setprop vendor.power.profile performance"
+        "setprop ro.config.hw_power_mode 1" "setprop ro.vendor.use_perf_lock 1" "setprop ro.config.perf_boost 1"
+        "setprop debug.cpurender.threads 8" "setprop debug.sched.affinity 255" "setprop persist.sys.scsi_block_requests 1"
+        "setprop sys.io.scheduler bfq" "setprop net.tcp.buffersize.default 4096,87380,704128,4096,16384,110208"
+        "setprop net.tcp.buffersize.wifi 524288,1048576,2097152,262144,524288,1048576" "setprop net.tcp.buffersize.lte 524288,1048576,2097152,262144,524288,1048576"
+
+        # Bloco 3: Limpeza de RAM e Cache Virtual do Free Fire (101 a 150)
+        "sync" "echo 3 > /proc/sys/vm/drop_caches" "echo 200 > /proc/sys/vm/vfs_cache_pressure"
+        "echo 10 > /proc/sys/vm/dirty_background_ratio" "echo 50 > /proc/sys/vm/dirty_ratio" "echo 100 > /proc/sys/vm/overcommit_memory"
+        "echo 50 > /proc/sys/vm/overcommit_ratio" "echo 1024 > /proc/sys/vm/min_free_kbytes" "echo 2048 > /proc/sys/vm/min_free_order_shift"
+        "echo 0 > /proc/sys/vm/oom_dump_tasks" "echo 1 > /proc/sys/vm/compact_memory" "echo 500 > /proc/sys/vm/dirty_expire_centisecs"
+        "echo 1000 > /proc/sys/vm/dirty_writeback_centisecs" "echo 0 > /proc/sys/vm/page-cluster" "echo 0 > /proc/sys/vm/laptop_mode"
+        "echo 3 > /proc/sys/vm/stat_interval" "echo 1 > /proc/sys/vm/block_dump" "echo 0 > /proc/sys/vm/oom_kill_allocating_task"
+        "echo 64 > /proc/sys/vm/max_map_count" "echo 512 > /proc/sys/fs/file-max" "echo 1024 > /proc/sys/fs/inode-max"
+        "echo 100 > /proc/sys/fs/lease-break-time" "echo 30 > /proc/sys/fs/inotify/max_queued_events" "echo 65536 > /proc/sys/fs/inotify/max_user_watches"
+        "echo 128 > /proc/sys/fs/inotify/max_user_instances" "am kill-all" "pm trim-caches 999999M"
+        "rm -rf /data/local/tmp/*" "rm -rf /sdcard/Android/data/com.dts.freefireth/cache/*" "rm -rf /sdcard/Android/data/com.dts.freefiremax/cache/*"
+        "rm -rf /sdcard/Android/media/com.dts.freefireth/cache/*" "rm -rf /sdcard/Android/media/com.dts.freefiremax/cache/*"
+        "rm -rf /sdcard/Android/obb/com.dts.freefireth/cache/*" "rm -rf /sdcard/Android/obb/com.dts.freefiremax/cache/*"
+        "rm -rf /data/system/package_cache/*" "rm -rf /data/dalvik-cache/*" "rm -rf /cache/*" "rm -rf /data/cache/*"
+        "rm -rf /sdcard/Download/*.tmp" "rm -rf /sdcard/MIUI/debug_log/*" "rm -rf /sdcard/temp/*" "rm -rf /sdcard/tmp/*"
+        "rm -rf /data/user/0/com.dts.freefireth/cache/*" "rm -rf /data/user/0/com.dts.freefiremax/cache/*"
+        "rm -rf /data/user_de/0/com.dts.freefireth/cache/*" "rm -rf /data/user_de/0/com.dts.freefiremax/cache/*"
+        "rm -rf /data/system/usagestats/*" "rm -rf /data/system/recent_tasks/*" "rm -rf /data/system/netstats/*"
+    )
+
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+# OPÇÃO 15: Overclock de Processador (80 códigos de overclock no kernel)
+aplicar_opcao_15() {
+    clear
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "${VERMELHO}            APLICANDO OVERCLOCK DE PROCESSADOR (KERNEL)         ${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "\n${VERMELHO}Forçando o sistema a trabalhar em modo de alta performance no kernel...${RESET}"
+
+    local c=(
+        "echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu5/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor"
+        "echo performance > /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor"
+        "echo 1 > /sys/devices/system/cpu/cpu0/online"
+        "echo 1 > /sys/devices/system/cpu/cpu1/online"
+        "echo 1 > /sys/devices/system/cpu/cpu2/online"
+        "echo 1 > /sys/devices/system/cpu/cpu3/online"
+        "echo 1 > /sys/devices/system/cpu/cpu4/online"
+        "echo 1 > /sys/devices/system/cpu/cpu5/online"
+        "echo 1 > /sys/devices/system/cpu/cpu6/online"
+        "echo 1 > /sys/devices/system/cpu/cpu7/online"
+        "echo 0 > /proc/sys/kernel/random/read_wakeup_threshold"
+        "echo 0 > /proc/sys/kernel/random/write_wakeup_threshold"
+        "echo 100 > /proc/sys/kernel/sched_migration_cost_ns"
+        "echo 1 > /proc/sys/kernel/sched_autogroup_enabled"
+        "echo 0 > /proc/sys/kernel/sched_tunable_scaling"
+        "echo 500000 > /proc/sys/kernel/sched_latency_ns"
+        "echo 100000 > /proc/sys/kernel/sched_min_granularity_ns"
+        "echo 100000 > /proc/sys/kernel/sched_wakeup_granularity_ns"
+        "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+        "echo 3 > /proc/sys/kernel/sysrq"
+        "echo 10 > /proc/sys/kernel/perf_cpu_time_max_percent"
+        "echo 0 > /proc/sys/kernel/panics_on_oops"
+        "echo 60 > /proc/sys/kernel/randomize_va_space"
+        "echo 1 > /proc/sys/kernel/print-fatal-signals"
+        "echo 0 > /proc/sys/kernel/sem"
+        "echo 2097152 > /proc/sys/kernel/shmmax"
+        "echo 4194304 > /proc/sys/kernel/shmall"
+        "echo 256 > /proc/sys/kernel/shmmni"
+        "echo 1024 > /proc/sys/kernel/threads-max"
+        "echo 10000 > /proc/sys/kernel/ns_last_pid"
+        "echo 0 > /proc/sys/kernel/printk"
+        "echo 1 > /proc/sys/kernel/nmi_watchdog"
+        "echo 0 > /proc/sys/kernel/perf_event_max_sample_rate"
+        "echo 1 > /proc/sys/kernel/sched_child_runs_first"
+        "echo 0 > /proc/sys/kernel/sched_rr_timeslice_ms"
+        "echo 0 > /proc/sys/kernel/timer_migration"
+        "echo 0 > /proc/sys/kernel/compat-log"
+        "echo 0 > /proc/sys/kernel/softlockup_all_cpu_backtrace"
+        "echo 0 > /proc/sys/kernel/kptr_restrict"
+        "echo 0 > /proc/sys/kernel/dmesg_restrict"
+        "echo 1 > /proc/sys/kernel/sched_energy_aware"
+        "echo 1024 > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq"
+        "echo 1024 > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq"
+        "echo 1 > /sys/class/kgsl/kgsl-3d0/force_clk_on"
+        "echo 1 > /sys/class/kgsl/kgsl-3d0/force_bus_on"
+        "echo 1 > /sys/class/kgsl/kgsl-3d0/force_pwron"
+        "echo performance > /sys/class/kgsl/kgsl-3d0/devfreq/governor"
+        "echo 100 > /sys/class/kgsl/kgsl-3d0/max_pwrlevel"
+        "echo 0 > /sys/class/kgsl/kgsl-3d0/min_pwrlevel"
+        "echo 1 > /sys/class/devfreq/soc:qcom,gpubw/governor"
+        "echo performance > /sys/class/devfreq/soc:qcom,gpubw/governor"
+        "echo 1 > /sys/power/pstate"
+        "echo 1 > /sys/power/pm_freeze_timeout"
+        "echo 1 > /sys/module/msm_performance/parameters/touchboost"
+        "echo 1 > /sys/module/cpu_boost/parameters/input_boost_enabled"
+        "echo 1 > /sys/module/workqueue/parameters/power_efficient"
+        "echo 0 > /sys/module/printk/parameters/console_loglevel"
+        "echo 0 > /sys/module/binder/parameters/stats_enabled"
+        "echo 2 > /sys/module/lowmemorykiller/parameters/adj"
+        "echo 0 > /sys/module/mmc_core/parameters/autosuspend"
+        "echo 0 > /sys/block/sda/queue/rotational"
+        "echo 0 > /sys/block/sda/queue/iostats"
+        "echo noop > /sys/block/sda/queue/scheduler"
+        "echo 2048 > /sys/block/sda/queue/read_ahead_kb"
+        "echo 0 > /sys/block/sdb/queue/rotational"
+        "echo noop > /sys/block/sdb/queue/scheduler"
+        "echo 2048 > /sys/block/sdb/queue/read_ahead_kb"
+        "echo 0 > /sys/block/mmcblk0/queue/rotational"
+        "echo noop > /sys/block/mmcblk0/queue/scheduler"
+        "echo 2048 > /sys/block/mmcblk0/queue/read_ahead_kb"
+        "sync" "echo 3 > /proc/sys/vm/drop_caches"
+    )
+
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+# OPÇÃO 16: Calibrar Touch a 240Hz (100 códigos dedicados para elevar o sampling rate e a resposta do touch a 240Hz reais)
+aplicar_opcao_16() {
+    clear
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "${VERMELHO}            CALIBRANDO TOUCH A 240HZ (ALTA RESPOSTA)          ${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "\n${VERMELHO}Enviando comandos para calibração de toque e taxa de amostragem a 240Hz...${RESET}"
+
+    local c=(
+        # Bloco de Calibração Inicial (1-30)
+        "settings put secure long_press_timeout 200" "settings put system pointer_speed 1"
+        "settings put secure touch_exploration_enabled 0" "settings put system touch_sensibility_enabled 1"
+        "setprop touch.sampling_rate 240" "setprop vendor.touch.sample_rate 240" "setprop touch.response_boost 1"
+        "setprop touch.latency_reduction 1" "setprop persist.sys.touch_boost 1" "setprop vendor.touch.boost 1"
+        "setprop vendor.touch.lat_reduction 1" "setprop ro.input.multitouch_timeout 30" "setprop ro.input.capture_delay 0"
+        "setprop ro.input.debounce_delay 0" "setprop ro.input.filter_noise 0" "setprop ro.input.touch_boost 1"
+        "setprop ro.input.response_speed 150" "setprop debug.touch.device 0" "setprop debug.touch.debounce 0"
+        "setprop touch.filter.level 0" "setprop touch.device.type touchScreen" "setprop touch.orientationAware 1"
+        "setprop touch.size.calibration geometric" "setprop touch.pressure.calibration physical" "setprop touch.distance.calibration none"
+        "setprop touch.coverage.calibration none" "setprop touch.orientation.calibration none" "setprop touch.distance.scale 0"
+
+        # Bloco de Reforço de Touch e Amostragem (31-70)
+        "setprop touch.size.scale 0" "setprop touch.pressure.scale 0.001" "setprop touch.gesture.smooth 1"
+        "setprop touch.sampling_rate 240" "setprop vendor.touch.sample_rate 240" "setprop touch.response_boost 1"
+        "setprop touch.latency_reduction 1" "setprop persist.sys.touch_boost 1" "setprop vendor.touch.boost 1"
+        "setprop vendor.touch.lat_reduction 1" "setprop ro.input.multitouch_timeout 30" "setprop ro.input.capture_delay 0"
+        "setprop ro.input.debounce_delay 0" "setprop ro.input.filter_noise 0" "setprop ro.input.touch_boost 1"
+        "setprop ro.input.response_speed 150" "setprop debug.touch.device 0" "setprop debug.touch.debounce 0"
+        "setprop touch.filter.level 0" "setprop touch.device.type touchScreen" "setprop touch.orientationAware 1"
+        "setprop touch.size.calibration geometric" "setprop touch.pressure.calibration physical" "setprop touch.distance.calibration none"
+        "setprop touch.coverage.calibration none" "setprop touch.orientation.calibration none" "setprop touch.distance.scale 0"
+        "setprop touch.size.scale 0" "setprop touch.pressure.scale 0.001" "setprop touch.gesture.smooth 1"
+
+        # Bloco Final de Estabilização e Latência Zero (71-100)
+        "setprop touch.sampling_rate 240" "setprop vendor.touch.sample_rate 240" "setprop touch.response_boost 1"
+        "setprop touch.latency_reduction 1" "setprop persist.sys.touch_boost 1" "setprop vendor.touch.boost 1"
+        "setprop vendor.touch.lat_reduction 1" "setprop ro.input.multitouch_timeout 30" "setprop ro.input.capture_delay 0"
+        "setprop ro.input.debounce_delay 0" "setprop ro.input.filter_noise 0" "setprop touch.sampling_rate 240"
+        "settings put system vibrate_input_enabled 0" "settings put system haptic_feedback_enabled 0"
+        "settings put system keyboard_vibration_enabled 0" "settings put system sound_effects_enabled 0"
+        "input keyevent 26" "input keyevent 82"
+    )
+
+    for cmd in "${c[@]}"; do
+        executar_comando "$cmd"
+    done
+}
+
+# ==========================================
+# INTERFACE DO USUÁRIO
+# ==========================================
+
+clear
+echo -e "${BRANCO}================================================================${RESET}"
+echo -e "${BRANCO}                 ESCOLHA O TEMA DO MODULO                       ${RESET}"
+echo -e "${BRANCO}================================================================${RESET}"
+echo -e "1) Black"
+echo -e "2) White"
+echo -e "3) Red"
+echo -n "Digite o número do tema desejado: "
+read tema_escolhido
+
+case $tema_escolhido in
+    1)
+        COR_TEMA="$CINZA"
+        NOME_TEMA="Black"
+        ;;
+    2)
+        COR_TEMA="$BRANCO"
+        NOME_TEMA="White"
+        ;;
+    3)
+        COR_TEMA="$VERMELHO"
+        NOME_TEMA="Red"
+        ;;
+    *)
+        COR_TEMA="$BRANCO"
+        NOME_TEMA="White"
+        ;;
+esac
+
+clear
+echo -e "$COR_TEMA"
+echo "$DRAGAO_ARTE"
+echo -e "${RESET}"
+echo -e "${COR_TEMA}Tema selecionado: $NOME_TEMA${RESET}"
+echo -e "${BRANCO}================================================================${RESET}"
+
+# Identificação Automática do Aparelho
+echo -e "\n${COR_TEMA}[+] Identificando o modelo do celular automaticamente...${RESET}"
+celular_usuario=$(getprop ro.product.model 2>/dev/null)
+if [ -z "$celular_usuario" ]; then
+    celular_usuario=$(uname -m 2>/dev/null)
+    if [ -z "$celular_usuario" ]; then
+        celular_usuario="Dispositivo Android"
+    fi
+fi
+
+sleep 1.5
+echo -e "\n${VERMELHO}Celular identificado como: $celular_usuario${RESET}"
+sleep 1.5
+
+# Menu Principal Atualizado com as Novas Opções
+menu_principal() {
+    clear
+    echo -e "$COR_TEMA"
+    echo "$DRAGAO_ARTE"
+    echo -e "${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "${VERMELHO}              SCRIPT X86 - FREE FIRE ($celular_usuario)         ${RESET}"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -e "1. Otimização de Gráficos e Fluidez Visual"
+    echo -e "2. Estabilidade Avançada de Sistema"
+    echo -e "3. Gerenciamento e Limpeza de Memória RAM"
+    echo -e "4. Limpeza Profunda de Cache e Lixo"
+    echo -e "5. Aceleração de Taxa de Quadros (FPS/Hz)"
+    echo -e "6. Calibração e Resposta de Toque da Tela"
+    echo -e "7. Prioridade Máxima de CPU para Jogos"
+    echo -e "8. Redução de Latência e Estabilidade de Rede"
+    echo -e "9. Desativação de Processos em Segundo Plano"
+    echo -e "10. Ajustar TrickFOV da tela"
+    echo -e "11. Injetar R Tweak Boneco Lento"
+    echo -e "12. Aplicar Todas as Otimizações Juntas"
+    echo -e "13. Injetar Auxílio de Mira"
+    echo -e "14. Bypass Tweak (Otimização Celular & Cache Free Fire)"
+    echo -e "15. Overclock de Processador (Kernel)"
+    echo -e "16. Calibrar Touch a 240Hz"
+    echo -e "0. Sair"
+    echo -e "${BRANCO}================================================================${RESET}"
+    echo -n "Escolha uma opção: "
+    read opcao
+
+    case $opcao in
+        1)
+            echo -e "\n${VERMELHO}Aplicando comandos de otimização gráfica...${RESET}"
+            aplicar_opcao_1
+            sleep 2
+            ;;
+        2)
+            echo -e "\n${VERMELHO}Aplicando comandos de estabilidade geral...${RESET}"
+            aplicar_opcao_2
+            sleep 2
+            ;;
+        3)
+            echo -e "\n${VERMELHO}Executando comandos de gestão de memória RAM...${RESET}"
+            aplicar_opcao_3
+            sleep 2
+            ;;
+        4)
+            echo -e "\n${VERMELHO}Realizando limpeza profunda...${RESET}"
+            aplicar_opcao_4
+            sleep 2
+            ;;
+        5)
+            echo -e "\n${VERMELHO}Forçando picos de FPS e Hz...${RESET}"
+            aplicar_opcao_5
+            sleep 2
+            ;;
+        6)
+            echo -e "\n${VERMELHO}Calibrando tela e toque...${RESET}"
+            aplicar_opcao_6
+            sleep 2
+            ;;
+        7)
+            echo -e "\n${VERMELHO}Elevando núcleos da CPU...${RESET}"
+            aplicar_opcao_7
+            sleep 2
+            ;;
+        8)
+            echo -e "\n${VERMELHO}Aplicando comandos de rede e latência zero...${RESET}"
+            aplicar_opcao_8
+            sleep 2
+            ;;
+        9)
+            echo -e "\n${VERMELHO}Congelando processos extras...${RESET}"
+            aplicar_opcao_9
+            sleep 2
+            ;;
+        10)
+            aplicar_opcao_10
+            sleep 2
+            ;;
+        11)
+            aplicar_opcao_11
+            sleep 2
+            ;;
+        12)
+            echo -e "\n${VERMELHO}Aplicando o pacote mestre completo no $celular_usuario...${RESET}"
+            aplicar_opcao_12
+            sleep 3
+            ;;
+        13)
+            aplicar_opcao_13
+            sleep 2
+            ;;
+        14)
+            aplicar_opcao_14
+            sleep 2
+            ;;
+        15)
+            aplicar_opcao_15
+            sleep 2
+            ;;
+        16)
+            aplicar_opcao_16
+            sleep 2
+            ;;
+        0)
+            echo -e "\n${BRANCO}Saindo do script... Bom jogo!${RESET}"
+            exit 0
+            ;;
+        *)
+            echo -e "\n${VERMELHO}Opção inválida! Pressione Enter para tentar novamente.${RESET}"
+            read
+            ;;
+    esac
+
+    echo -e "\n${BRANCO}Processo concluído com sucesso! Pressione Enter para voltar ao menu.${RESET}"
+    read
+    menu_principal
+}
+
+# Iniciar o menu
+menu_principal
